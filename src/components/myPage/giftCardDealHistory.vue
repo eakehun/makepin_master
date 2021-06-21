@@ -22,25 +22,20 @@
 						<div class="boot_tablet">
 							<b-table :fields="fields" responsive :items="userInquiryListData">
 								<template #cell(createDate)="data">
-									{{ data.value.substring(0,10) }}
+									<div @click="detailPageGo(data.item.idx)">{{ data.item.createDate.substring(0,10) }}</div>
 								</template>
-
 								<template #cell(company)="data">
-									{{ data.value == 'culture' ? '컬처랜드' : '해피머니'}}
+									<div @click="detailPageGo(data.item.idx)">{{ data.item.company == 'culture' ? '컬처랜드' : '해피머니'}}</div>
 								</template>
-
 								<template #cell(requestPrice)="data">
-									<i>{{ numberWithCommas(data.value) }}</i>
+									<div @click="detailPageGo(data.item.idx)">{{ numberWithCommas(data.item.requestPrice) }}</div>
 								</template>
-
 								<template #cell(status)="data">
-									<i>{{ data.value }}</i>
+									<div @click="detailPageGo(data.item.idx)">{{ data.value }}</div>
 								</template>
-
 								<template #cell(comepletePrice)="data">
-									<i>{{ numberWithCommas(data.value) }}</i>
+									<div @click="detailPageGo(data.item.idx)">{{ numberWithCommas(data.value) }}</div>
 								</template>
-
 								<template #cell(idx)="data">
 									<b-button size="sm" variant="outline-dark" @click="detailPageGo(data.value)">자세히보기</b-button>
 								</template>
@@ -55,9 +50,11 @@
 			</div>
 		</b-container>
 	</div>
+
 </template>
 <script>
 	import axios from "axios"
+	import { mapActions, mapState } from "vuex"
 	export default{
 		name: 'giftCardDealHistory',
 		data(){
@@ -89,13 +86,16 @@
 				]
 			}
 		},
-		
+		computed:{
+            ...mapState(['isLogin'])
+        },
 		created() {
 			this.giftCardDealHistory();
-			this.currentPage = this.$route.query.page
 		},
 
 		methods: {
+			...mapActions(["logOut"]),
+
 			numberWithCommas(data) {
 				return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			},
@@ -121,7 +121,7 @@
 					if(res.data.content.length == 0 ){
 
 					} else {
-						this.replaceuserInquiryList('userInquiryList', res)
+						this.replaceuserInquiryList('firstList', res)
 					}
 					this.seviceTarget = 'pagination'
 				})
@@ -144,11 +144,13 @@
 			},
 
 			replaceuserInquiryList(obj, data){
+
 				if(data.data.totalElements == 0){
 					this.totalPages = 1
 					this.currentPage = 1
 					this.userInquiryListData = []
 				} else {
+					this.currentPage = data.data.pageable.pageNumber+1
 					this.userInquiryListData = data.data.content
 				}
 				
@@ -158,6 +160,7 @@
 				} else {
 					this.totalPages = data.data.totalPages
 				}
+
 			},
 
 			linkGen(pageNum, info) {
@@ -187,6 +190,7 @@
 				axios
 				.get(process.env.VUE_APP_BASE_URL + '/users/trading/fromDate/'+ this.startDay +' 00:00:00/toDate/'+ this.endDay +' 16:58:58/?page='+ pageData +'&size=10&sort=idx,desc', { withCredentials: true })
 				.then( res => {
+					console.log(res)
 					this.replaceuserInquiryList('userInquiryList', res)
 				})
 				.catch( err => {
@@ -216,9 +220,9 @@
 				}
 			
 				axios
-				.get(process.env.VUE_APP_BASE_URL + '/users/trading/fromDate/'+ this.startDay +' 00:00:00/toDate/'+ this.endDay +' 23:58:58/?page='+pageData+'&size=10&sort=idx,desc', { withCredentials: true })
+				.get(process.env.VUE_APP_BASE_URL + '/users/trading/fromDate/'+ this.startDay +' 00:00:00/toDate/'+ this.endDay +' 23:58:58/?page=0&size=10&sort=idx,desc', { withCredentials: true })
 				.then( res => {
-					this.replaceuserInquiryList('userInquiryList', res)
+					this.replaceuserInquiryList('userInquirySelected', res)
 				})
 				.catch( err => {
 					// console.log(err);

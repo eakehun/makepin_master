@@ -25,30 +25,29 @@
 						<tr>
 							<td style="width:23%;padding:15px;color:#464646;font-weight:bold;border-bottom:solid 1px #e1e1e1;background-color:#ededed">아이디</td>
 							<td style="padding:10px;color:#464646;font-weight:bold;border-bottom:solid 1px #e1e1e1">
-								<b-form-input v-model="from.userId" placeholder=""></b-form-input>
+								<b-form-input v-model="from.userId" @blur="inputBlur" placeholder=""></b-form-input>
 							</td>
 						</tr>
 						<tr>
 							<td style="width:23%;padding:15px;color:#464646;font-weight:bold;border-bottom:solid 1px #e1e1e1;background-color:#ededed">이름</td>
 							<td style="padding:10px;color:#464646;font-weight:bold;border-bottom:solid 1px #e1e1e1">
-								<b-form-input v-model="from.name" placeholder=""></b-form-input>
+								<b-form-input v-model="from.name" @blur="inputBlur" placeholder=""></b-form-input>
 							</td>
 						</tr>
 						<tr>
 							<td style="width:23%;padding:15px;color:#464646;font-weight:bold;border-bottom:solid 1px #e1e1e1;background-color:#ededed">비밀번호</td>
 							<td style="padding:10px;color:#464646;font-weight:bold;border-bottom:solid 1px #e1e1e1">
-								<b-form-input v-model="from.pwd" type="password" placeholder=""></b-form-input>
+								<b-form-input v-model="from.pwd" @blur="inputBlur" type="password" placeholder=""></b-form-input>
 							</td>
 						</tr>
 					</tbody>
 				</table>
-				<b-button variant="primary" class="withdraw_btn" @click="userIdChecked" v-if="checkedVal != true">확인</b-button>
-				<div class="text-center type2" v-else>확인이 완료되었습니다.</div>
+				<div class="text-center type2" v-model="msg">{{msg}}</div>
 			</div>
 
 			<div class="bTcont_body">
 				<button class="btnn bTcont bTsuccess" @click="history_back">취소하기</button>
-				<button id="withDrawBtn" class="btnn bTcont bTsuccess" @click="withDrawActive">회원탈퇴</button>
+				<button id="withDrawBtn" class="btnn bTcont bTsuccess" :class="checkedVal != true ? '': 'grd'" @click="withDrawActive">회원탈퇴</button>
 			</div>
 		</div>
 	</b-container>
@@ -70,7 +69,8 @@
 				},
 				withDrawText: '회원 탈퇴 신청에 앞서 아래의 사항을 반드시 확인하여 주시기 바랍니다.\n1. 회원탈퇴 시 처리내용\n(1) 회원 탈퇴 즉시 회원전용 서비스의 이용이 불가능합니다.\n(2) 탈퇴하신 계정의 ID와 동일한 ID로는 재 가입이 불가능합니다.\n(3) 회원 탈퇴 후 재가입 회원의 경우 신규회원 대상 이벤트에 참여하실 수 없습니다.\n(4) 소비자보호에 관한 법률 제6조(거래기록의 보전 등) 및 동법 시행령 제6조에 의거,\n* 계약 또는 청약철회 등에 관한 기록은5년, 대금결제 및 재화등의 공급에 관한 기록은5년,* 소비자의 불만 또는 분쟁처리에 관한 기록은3년동안 보관됩니다.동 개인정보는 법률에 의한 경우가 아니고서는 보유 되어지는 이외의 다른 목적으로는 이용되지않습니다.\n(5) 회원 정보: 회원탈퇴 완료 시 당사 사이트 이용 권한이 삭제되며, 기존 거래 내역에 대한 본인인증 필요성 등을 위해 회원가입에 따른 사용자정보는 6개월 동안 보관됩니다.\n2. 회원탈퇴 시 게시물 관리\n회원탈퇴 후 당사 사이트에 입력하신 게시물 및 댓글은 삭제되지 않으며, 회원정보 삭제로 인해작성자 본인을 확인할 수 없으므로 게시물 편집 및 삭제 처리가 원천적으로 불가능 합니다. 게시물 삭제를 원하시는 경우에는 먼저 해당 게시물을 삭제 하신 후, 탈퇴를 신청하시기 바랍니다.',
 				status: false,
-				withDrawSta: false
+				withDrawSta: false,
+				msg: ''
 			}
 		},
 		methods: {
@@ -84,18 +84,36 @@
 				axios
 				.post(process.env.VUE_APP_BASE_URL + '/users/login/',this.from, { withCredentials: true })
 				.then( res => {
-					if(res.data.name == this.from.name){
+					if(this.from.name ==res.data.name){
 						this.checkedVal = true
 						this.withDrawSta = true
+						this.msg = ''
+					} else {
+						this.checkedVal = false
+						this.withDrawSta = false
+						this.msg = '입력하신 정보가 일치하지 않습니다.'
 					}
 				})
 				.catch( err => {
-					this.showMsgBoxOne('입력하신 정보가 일치하지 않습니다.')
+					this.checkedVal = false
+					this.msg = '입력하신 정보가 일치하지 않습니다.'
+					// this.showMsgBoxOne('입력하신 정보가 일치하지 않습니다.')
 					this.withDrawSta = false
 				});
 			},
 
-			showMsgBoxOne(text) {
+			inputBlur(){
+				if(this.from.name != '' && this.from.pwd != '' && this.from.userId != ''){
+					if(this.status != true){
+						this.checkedVal = false
+						return this.msg = '위 내용을 확인해주세요.'
+					} else {
+						this.userIdChecked()
+					}
+				}
+			},
+
+			showMsgBoxOne(text, type) {
 				this.boxTwo = ''
 				this.$bvModal.msgBoxOk(text, {
 					okTitle: '확인',
@@ -106,6 +124,10 @@
 				})
 				.then(value => {
 					this.boxTwo = value
+
+					if(type == 2){
+						this.logOut();
+					}
 				})
 				.catch(err => {
 
@@ -128,16 +150,13 @@
 			},
 
 			withDrawActive(){
-				if(this.status != true) return this.showMsgBoxOne('내용을 확인해주세요.')
-
 				if(this.checkedVal != true) return this.showMsgBoxOne('회원정보 인증을 진행해주세요.')
 
 				if(this.withDrawSta == true){
 					axios
 					.put(process.env.VUE_APP_BASE_URL + '/users/secede/', {},{ withCredentials: true })
 					.then( res => {
-						this.logOut()
-						this.showMsgBoxOne('회원탈퇴가 처리되었습니다.')
+						this.showMsgBoxOne('회원탈퇴가 처리되었습니다.', 2)
 					})
 					.catch( err => {
 						if(err.response.data.message == "not complete trading remain"){
@@ -148,6 +167,17 @@
 			},
 		},
 		watch: {
+			status(){
+				if(this.from.name != '' && this.from.pwd != '' && this.from.userId != ''){
+					if(this.status != true){
+						this.checkedVal = false
+						return this.msg = '위 내용을 확인해주세요.'
+					} else {
+						this.userIdChecked()
+					}
+				}
+			},
+
 			mdl_tkn(val){
 				this.phoneLastTest()
 			},

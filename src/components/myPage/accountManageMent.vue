@@ -15,7 +15,7 @@
 						placeholder="비밀번호를 입력해주세요."
 						@keyup.enter="userStaChecked"
 						>
-						<b-button variant="primary" class="login_btn" @click="userStaChecked" >확인</b-button>
+						<button variant="primary" class="btnn bTcont grd" @click="userStaChecked">확인</button>
 					</div>
 				</div>
 			</div>
@@ -33,14 +33,21 @@
 				pwd: '',
 			}
 		},
+		computed:{
+            ...mapState(['isLogin'])
+        },
 		mounted(){
 			this.userData();
+			if(this.isLogin){
+			} else {
+				// console.log('로그인이 필요한 페이지 입니다.');
+				// this.logOut();
+			}
 		},
-	
 		methods: {
 			...mapActions(["logOut"]),
 
-			showMsgBoxOne(text, sta) {
+			showMsgBoxOne(text, type) {
 				this.boxTwo = ''
 				this.$bvModal.msgBoxOk(text, {
 					okTitle: '확인',
@@ -51,9 +58,14 @@
 				})
 				.then(value => {
 					this.boxTwo = value
-					if(sta == false){
+					if(type == true){
+						this.$router.push({name: 'accountManageMentDetail', path: 'accountManageMentDetail', query: {user: true}}, function() {
+						//console.log("accountManageMentDetail 호출 완료");
+					});
+					} else {
 						this.logOut()
 					}
+
 				})
 				.catch(err => {
 
@@ -73,25 +85,29 @@
 
 			userStaChecked(){
 				axios
-				.get(process.env.VUE_APP_BASE_URL+'/users/login/id/'+this.uesrId+'/pwd/'+this.pwd+'/', { withCredentials: true })
+				.post(''+process.env.VUE_APP_BASE_URL+'/users/login/', {"userId": this.uesrId,"pwd": this.pwd},{ withCredentials: true })
 				.then( res => {
-					this.showMsgBoxOne('확인되었습니다.')
-					this.$router.push({name: 'accountManageMentDetail', path: 'accountManageMentDetail', query: {user: true}}, function() {
-						//console.log("accountManageMentDetail 호출 완료");
-					});
+					this.showMsgBoxOne('확인되었습니다.', true)
 				})
 				.catch( err => {
-					this.showMsgBoxOne('정보가 일치하지 않습니다. \n 안전한 서비스이용을 위해 로그아웃합니다.', false)
+					if(err.response.data.message === process.env.VUE_APP_LOGIN_MESSAGE){
+						this.showMsgBoxOne('정보가 일치하지 않습니다. \n 안전한 서비스이용을 위해 로그아웃합니다.', false)
+					} else {
+						// console.log(2)
+					}
+
+					if(err.response.data.message == "suspended user"){
+						this.showMsgBoxOne('정보가 일치하지 않습니다. \n 안전한 서비스이용을 위해 로그아웃합니다.', false)
+					}
 				});
 			},
-
-			
 		},
 	}
 
 </script>
 
 <style scoped="">
+.btnn{width:100%;}
 .from_box{padding:20px 0;margin-bottom:10px;}
 .from_box input{width:100%;border:solid 1px #ddd;border-radius:5px;margin:1rem 0 2rem 0;padding:6px 10px;}
 .btn.login_btn{width:100%;border-radius:0;}

@@ -61,7 +61,7 @@
 								</div>
 								<div class="tbl_user_tr">
 									<div class="tbl_cell status">{{list.status}}</div>
-									<div class="tbl_cell updateDate">{{list.updateDate.split(' ')[0]}}<br/>{{list.updateDate.split(' ')[1]}}</div>
+									<div class="tbl_cell updateDate">{{list.oneInquiryResponseList.length != 0 ? list.oneInquiryResponseList[0].content : '-'}}</div>
 								</div>
 
 							</div>
@@ -101,6 +101,7 @@
 	</div>
 </template>
 <script>
+	import { mapState, mapActions } from "vuex"
 	import axios from "axios"
 	export default{
 		data(){
@@ -125,11 +126,16 @@
 				],
 			}
 		},
+		computed:{
+            ...mapState(['isLogin'])
+        },
 		name: 'frequentlyAskedQuestions',
 		created() {
-	        this.faqList()
+			this.faqList();
 	    },
 	    methods: {
+	    	...mapActions(["logOut"]),
+
 			faqList() {
 				let today = new Date();   
 				let year = today.getFullYear(); // 년도
@@ -278,6 +284,7 @@
 
 .faq_cont_head .status{float:left;width:80px;}
 .faq_cont_head .title{float:left;width:calc(100% - 380px);}
+.faq_cont .tbl_user_tr .title{text-align:center}
 .faq_cont_head .day{float:left;width:150px;}
 .faq_cont_head .updateDate{float:left;width:150px;}
 
@@ -285,12 +292,12 @@
 .faq_cont .status{width:80px;}
 .faq_cont .title{width:calc(100% - 380px);}
 .faq_cont .day{width:150px;text-align:center}
+
 .faq_cont .updateDate{width:150px;text-align:center;}
 .bttbt{padding:.25rem .5rem;font-size:.875rem;line-height:1.5;border-radius:.2rem;border:solid 1px #007bff;font-weight:400;display:inline-block}
 .media{padding:10px;}
 .user_text{padding:10px;}
 .admin_text{border-top:solid 1px #ddd;padding:10px;padding-top:25px;}
-
 /*.mobile .faq_cont_head .day{display:none;}
 .mobile .faq_cont_head .updateDate{display:none;}
 .mobile .faq_cont_head .title{width: calc(100% - 80px);}
@@ -320,6 +327,6 @@
 .tbl_userBy{}
 .tbl_user_tr{display:table-row;}
 .tbl_user_tr:after{content:'';display:block;clear:both;}
-.mobile .faq_cont{border:solid 1px #eee;margin-top:1rem;}
+.mobile .faq_cont{margin-top:1rem;}/* border:solid 1px #eee; */
 .mobile .faq_cont:first-children{margin-top:none;}
 </style>​

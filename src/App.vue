@@ -49,6 +49,7 @@
                 return this.$store.getters.doubleCounter;
             }
         },
+
         watch: {
             $mq (val){
                 this.$store.dispatch('checkDevice', val)
@@ -61,10 +62,13 @@
 </script>
 <style>
 #app{}
+#app a{text-decoration:none;}
+#app .btn input{display:none;}
 *:focus,
 button:focus {outline:0;outline: none;}
 input::placeholder{font-size:.87rem;color:#999;}
 ul, li{list-style:none;}
 .textC{text-align:center;}
+.container{max-width: 1140px!important;}
 .mobile .sub_top_item{width:150px;margin-bottom:-15px;margin-left:0}
 </style>

@@ -32,22 +32,13 @@
 								<th>입금금액</th>
 								<td>
 									<p>-요청금액 : {{numberWithCommas(requestPrice)}} 원</p>
-									<p>-송금 수수료 : {{numberWithCommas(fees - transperFees)}}  원</p>
-									<p>-판매 수수료 : {{numberWithCommas( requestPrice >= waiverAmount ? 0 : transperFees)}} 원</p>
-									<!-- <p>-판매 수수료 : {{fees}}, {{transperFees}}  원</p> -->
+									<p>-판매 수수료 : {{numberWithCommas( requestPrice >= waiverAmount ?  fees : fees - transperFees)}} 원</p>
+									<p>-송금 수수료 : {{numberWithCommas( requestPrice >= waiverAmount ? 0 : transperFees )}} 원</p>
 									<div class="comeplete_price">-입금금액 : {{numberWithCommas(comepletePrice)}} 원 </div>
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<!-- <div class="sub_text">
-						<h6>※ 판매상태 안내</h6>
-						<p>
-							-처리중 : 판매 요청 접수된 핀번호 확인 후 입금 처리 진행 중인 상태입니다. -판매완료 : 핀번호가 판매완료 되어 수수료 금액 제외 후 입금 완료된 상태입니다.<br/>
-							-판매완료(일부) : 접수된 핀번호 중 판매불가 상태의 일부 핀번호 제외 후 판매완료된 상태입니다.<br/>
-							-판매불가 : 접수된 핀번호가 판매불가 상태 입니다.
-						</p>
-					</div> -->
 				</div>
 
 				<h5 class="mT30">판매요청 상품권 내역</h5>
@@ -69,8 +60,8 @@
 									<td>{{no+1}}</td>
 									<td>{{item.pinCode}}</td>
 									<td>{{item.tradingIdx}}</td>
-									<td>{{item.price != 0 ? numberWithCommas(item.price) : ''}}</td>
-									<td>{{item.status}}</td>
+									<td>{{item.price != 0 ? numberWithCommas(item.price) : '-'}}</td>
+									<td>{{item.status.replace(/_/g, ' ')}}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -104,6 +95,7 @@
 				withdrawStatus: '',
 				purchaseFeePercents: '',
 				requestedAmount: '',
+				waiverAmount: '',
 				feeAmount: '',
 				depositAmount: '',
 				requestPrice: '',
@@ -198,8 +190,10 @@
 				.then( res => {
 					if(brand == 'culture'){
 						this.transperFees = res.data.content[1].transperFees
+						this.waiverAmount = res.data.content[1].waiverAmount
 					} else if(brand == 'happy'){
 						this.transperFees = res.data.content[0].transperFees
+						this.waiverAmount = res.data.content[0].waiverAmount
 					}
 				})
 				.catch( err => {
@@ -243,7 +237,7 @@
 .sub_text p{font-size:.8rem;color:#666;}
 .bl_horizTable{border-top:1px solid #ddd;border-bottom:1px solid #ddd;}
 .bl_horizTable table{width:100%}
-.bl_horizTable th{width:20%;padding:15px;background-color:#efefef;border-bottom:1px solid #ddd;font-weight:700;vertical-align:middle}
+.bl_horizTable th{width:30%;padding:15px;background-color:#efefef;border-bottom:1px solid #ddd;font-weight:700;vertical-align:middle}
 .bl_horizTable td{padding:15px;border-bottom:1px solid #ddd}
 .bl_horizTable tr:last-child td,.bl_horizTable tr:last-child th{border-bottom-width:0}
 .bl_horizTable td p span{font-size:.85rem;color:#5171d8;}
@@ -265,6 +259,7 @@ table>tbody>tr:hover>td{background-color:#fafafa}
 h5{padding:5px;}
 h5.mT30{margin-top:30px;}
 @media (max-width: 767px) {
+	.mobile .mypage_container{padding:1rem 0;}
 	.table-no-more,
 	.table-no-more > thead,
 	.table-no-more > thead > tr,
@@ -275,10 +270,24 @@ h5.mT30{margin-top:30px;}
 
 	.table-no-more>thead{position:absolute;top:-9999px;left:-9999px;opacity:0}
 	.table-no-more>tbody>tr>td{position:relative;padding-left:45%}
-	.table-no-more>tbody>tr:nth-child(even)>td{background-color:#fff}
-	.table-no-more>tbody>tr:nth-child(odd)>td{background-color:#fafafa}
-	.table-no-more>tbody>tr>td:before{position:absolute;top:15px;left:5%;width:40%;white-space:nowrap;font-weight:700}
+	.table-no-more>tbody>tr:nth-child(even)>td:first-child{background-color:#fafafa}
+	.table-no-more>tbody>tr:nth-child(odd)>td:first-child{background-color:#fafafa}
+	.table-no-more>tbody>tr>td:before{position:absolute;top:15px;left:5%;width:30%;white-space:nowrap;font-weight:700}
 	.table-no-more>tbody>tr>td:after{content:"";position:absolute;top:0;left:0;width:40%;height:100%;border-right:1px solid #eee}
+
+	.table.table-no-more tr td:first-child,
+	.table.table-no-more tr th:first-child,
+	.table.table-no-more tr th:first-child + th,
+	.table.table-no-more tr td:first-child + td,
+	.table.table-no-more tr th:first-child + th + th,
+	.table.table-no-more tr td:first-child + td + td,
+	.table.table-no-more tr th:first-child + th + th+ th,
+	.table.table-no-more tr td:first-child + td + td + td,
+	.table.table-no-more tr th:first-child + th + th+ th+ th,
+	.table.table-no-more tr td:first-child + td + td + td + td{width:auto;text-align:center}
+
+	.table.table-no-more tr th,
+	.table.table-no-more tr td{width:auto;}
 
 	.table-no-more > tbody > tr > td:nth-of-type(1):before {content: "No.";}
 	.table-no-more > tbody > tr > td:nth-of-type(2):before {content: "핀번호";}

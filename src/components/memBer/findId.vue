@@ -28,7 +28,7 @@
 				<h4 v-model="userName">{{userName}}</h4> 님이 가입하신 아이디는
 			</div>
 			<div class="form_line user_id">
-				<h3 v-model="userId">{{userId}}</h3> 님이 가입하신 아이디는
+				<h3 v-model="userId">{{userId}}</h3>
 			</div>
 			<div class="form_line normal">
 				<p>입니다</p>

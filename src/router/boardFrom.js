@@ -9,14 +9,12 @@ import store from "../store"
 import axios from "axios"
 
 const onlyAuthUser = (to, from, next) => {
-    store.dispatch('mutationsCheckSession').then(function(userSta) {
-        if(userSta.status != 200){
-            alert('로그인이 필요한 페이지 입니다.')
-            store.dispatch('logOut')
-        } else {
-            next()
-        }
-    });
+    if(localStorage.getItem("loginSta") != 'true'){
+        // alert('로그인이 필요한 페이지 입니다.');
+        store.dispatch('logOut')
+    } else {
+        next()
+    }
 }
 
 export default [
@@ -49,7 +47,7 @@ export default [
             },
             {
                 path: 'userInquiry',
-                beforeEnter: onlyAuthUser,
+                // beforeEnter: onlyAuthUser,
                 name: 'userInquiry',
                 component: userInquiry,
                 query:{
@@ -59,7 +57,7 @@ export default [
             },
             {
                 path: 'userInquiryWriting',
-                beforeEnter: onlyAuthUser,
+                // beforeEnter: onlyAuthUser,
                 name: 'userInquiryWriting',
                 component: userInquiryWriting
             },

@@ -45,7 +45,6 @@ export default new Vuex.Store({
 		userDataValue(state, payLoad){
 			state.userData = payLoad
 		},
-
 	},
 	actions: {
 		login({ commit }, loginObj){
@@ -72,26 +71,33 @@ export default new Vuex.Store({
 		},
 
 		checkSession: function({ commit }){
-			this.dispatch('mutationsCheckSession').then(function(userSta) {
-				if(userSta.status != 200){
-					commit('logOut')
-				} else {
-					commit('logInSuccess', userSta.data.name)
-				}
-			});
+			if(localStorage.getItem("loginSta") == 'true'){
+				this.dispatch('mutationsCheckSession').then(function(userSta) {
+					if(userSta.status != 200){
+						commit('logOut')
+					} else {
+						commit('logInSuccess', userSta.data.name)
+					}
+				});
+			}
 		},
 
 		mutationsCheckSession(){
-			return new Promise(function(resolve, reject) {
-				axios
-				.get(process.env.VUE_APP_BASE_URL+'/users/info/', { withCredentials: true })
-				.then( res => {
-					resolve(res);
-				})
-				.catch( err => {
-					resolve('err');
+			if(localStorage.getItem("loginSta") == 'true'){
+				return new Promise(function(resolve, reject) {
+					axios
+					.get(process.env.VUE_APP_BASE_URL+'/users/info/', { withCredentials: true })
+					.then( res => {
+						resolve(res);
+					})
+					.catch( err => {
+						resolve('err');
+					});
 				});
-			});
+			} else {
+				resolve('err');
+			}
+			
 		},
 
 		userDataVal: function({ commit }, data){
@@ -102,7 +108,7 @@ export default new Vuex.Store({
 			commit('deviceValue', data)
 		},
 
-		logOut({ commit }){
+		logOut({ commit, type }){
 			axios
 			.get(process.env.VUE_APP_BASE_URL+'/logout', {withCredentials: true})
 			.then( res => {

@@ -1,68 +1,70 @@
 <template>
 	<div>
-		<slot name="header"></slot>
+		<b-overlay :show="signUpShow" variant="white" rounded="lg">
+			<slot name="header"></slot>
 
-		<div id="signFromInput" class="sign_from_input">
-			
-			<div class="sign_input_box">
-				<div class="title"><span id="idtitle">✓ </span>아이디로 사용할 이메일주소를 입력해주세요.</div>
-				<div class="input_box">
-					<input type="text" id="emailName" v-model="from.userId" @focus="inputFocus" @blur="inputBlur" placeholder="본인이 실제 사용하는 이메일 주소를 입력하세요.">
-					<span>{{emailText}}</span>
-				</div>
-			</div>
+			<div id="signFromInput" class="sign_from_input">
 
-			<div class="mt-4">
 				<div class="sign_input_box">
-					<div class="title"><span id="pwdtitle">✓ </span>비밀번호를 입력해 주세요.</div>
+					<div class="title"><span id="idtitle">✓ </span>아이디로 사용할 이메일주소를 입력해주세요.</div>
 					<div class="input_box">
-						<input type="password" id="txtPassword1" @focus="inputFocus" @blur="inputBlur" v-model="from.pwd" placeholder="영문/숫자/특수문자 중 2가지 조합 4~15자리">
-						<span>{{passwordText1}}</span>
+						<input type="text" id="emailName" v-model="from.userId" @focus="inputFocus" @blur="inputBlur" placeholder="본인이 실제 사용하는 이메일 주소를 입력하세요.">
+						<span>{{emailText}}</span>
 					</div>
 				</div>
-				<div class="sign_input_box mt-2">
+
+				<div class="mt-4">
+					<div class="sign_input_box">
+						<div class="title"><span id="pwdtitle">✓ </span>비밀번호를 입력해 주세요.</div>
+						<div class="input_box">
+							<input type="password" id="txtPassword1" @focus="inputFocus" @blur="inputBlur" v-model="from.pwd" placeholder="영문/숫자/특수문자 중 2가지 조합 4~15자리">
+							<span>{{passwordText1}}</span>
+						</div>
+					</div>
+					<div class="sign_input_box mt-2">
+						<div class="input_box">
+							<input type="password" id="txtPassword2" @focus="inputFocus" @keyup="inputBlur" v-model="from.repwd" placeholder="비밀번호 확인">
+							<span>{{passwordText2}}</span>
+						</div>
+					</div>
+					<div class="list_txt_type2">
+						<ul>
+							<li class="title_li">비밀번호 정책</li>
+							<li>띄어쓰기(공백)불가 -최소4자 ~ 최대 15자 / 영문, 숫자, 특수문자 중 2가지 이상 조합</li>
+							<li>대소문자 구분</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="sign_input_box mt-4">
+					<div class="title"><span>✓ </span>본인 휴대폰으로 인증해주세요.</div>
 					<div class="input_box">
-						<input type="password" id="txtPassword2" @focus="inputFocus" @blur="inputBlur" v-model="from.repwd" placeholder="비밀번호 확인">
-						<span>{{passwordText2}}</span>
+
+						<button id="phoneDeptnBtn" class="btnn bTcont phoneBtn" @click="getAxios" v-if="checkedSta.phoneSta != true">휴대폰 인증하기</button>
+
+						<div class="phoneDbCheck mt-2" v-else>
+							<input type="text" v-model="phoneStaText" placeholder="">
+							<button class="" @click="phoneStaCheck">변경하기</button>
+						</div>
 					</div>
 				</div>
-				<div class="list_txt_type2">
-					<ul>
-						<li class="title_li">비밀번호 정책</li>
-						<li>띄어쓰기(공백)불가 -최소4자 ~ 최대 15자 / 영문, 숫자, 특수문자 중 2가지 이상 조합</li>
-						<li>대소문자 구분</li>
-					</ul>
-				</div>
-			</div>
 
-			<div class="sign_input_box mt-4">
-				<div class="title"><span>✓ </span>본인 휴대폰으로 인증해주세요.</div>
-				<div class="input_box">
-
-					<button id="phoneDeptnBtn" class="btnn bTcont phoneBtn" @click="getAxios" v-if="checkedSta.phoneSta != true">휴대폰 인증하기</button>
-
-					<div class="phoneDbCheck mt-2" v-else>
-						<input type="text" v-model="phoneStaText" placeholder="">
-						<button class="" @click="phoneStaCheck">변경하기</button>
-					</div>
-				</div>
-			</div>
-
-			<div class="sign_input_box mt-4">
-				<div class="title">✓ 계좌 인증을 해주세요.</div>
-				<div class="input_box">
-					<!-- <b-form-select v-model="from.accountCode" name="searchYear" id="searchYear" :options="options"></b-form-select> -->
-					<multiselect v-model="account" :options="options" :custom-label="nameWithLang" placeholder="은행을 선택해 주세." label="accountCode" track-by="accountCode" selectLabel="선택하려면 Enter 키를 누르세요." deselectLabel="제거하려면 Enter 키를 누르세요.">
-						<span slot="noResult" class="notAcc">검색한 이름의 은행이 존재하지 않습니다.</span>
-					</multiselect>
-					<div class="phoneDbCheck mt-2">
-						<input type="number" v-model="account.accountNum" @focus="accountNumData" placeholder="계좌번호 입력 후 “인증하기” 를 누르세요.">
-						<button class="" @click="accountCheck">{{ checkedSta.accountSta ? '변경하기' : '인증하기' }}</button>
+				<div class="sign_input_box mt-4">
+					<div class="title">✓ 계좌 인증을 해주세요.</div>
+					<div class="input_box">
+						<!-- <b-form-select v-model="from.accountCode" name="searchYear" id="searchYear" :options="options"></b-form-select> -->
+						<multiselect v-model="account" :options="options" :custom-label="nameWithLang" placeholder="은행을 선택해 주세." label="accountCode" track-by="accountCode" selectLabel="선택하려면 Enter 키를 누르세요." deselectLabel="제거하려면 Enter 키를 누르세요.">
+							<span slot="noResult" class="notAcc">검색한 이름의 은행이 존재하지 않습니다.</span>
+						</multiselect>
+						<div class="phoneDbCheck mt-2">
+							<input type="number" v-model="account.accountNum" @focus="accountNumData" placeholder="계좌번호 입력 후 “인증하기” 를 누르세요.">
+							<button class="" @click="accountCheck">{{ checkedSta.accountSta ? '변경하기' : '인증하기' }}</button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<button id="nextDeptnBtn" class="btnn bTcont bTsuccess" @click="successSignUp">회원가입하기</button>
+			<button id="nextDeptnBtn" class="btnn bTcont bTsuccess" @click="successSignUp">회원가입하기</button>
+		</b-overlay>
 	</div>
 </template>
 <script>
@@ -75,6 +77,19 @@
 		components: { Multiselect },
 		data(){
 			return {
+				signUpShow: false,
+				variants: [
+				'transparent',
+				'white',
+				'light',
+				'dark',
+				'primary',
+				'secondary',
+				'success',
+				'danger',
+				'warning',
+				'info',
+				],
 				boxTwo: '',
 				mdl_tkn: '',
 				reMdl_tkn:'',
@@ -137,7 +152,11 @@
 			},
 
 			accountNumData(){
-				return this.account.accountNum = this.account.accountNum.replace(/[^0-9]/g, '');
+				if(this.account.accountNum != undefined){
+					return this.account.accountNum = this.account.accountNum.replace(/[^0-9]/g, '');
+				} else {
+					return
+				}
 			},
 
 			preTerms(){
@@ -287,94 +306,92 @@
 				this.passwordSta = false;
 				obj.target.parentElement.classList.remove('success')
 				if(this.from.pwd == "") return
-				if(this.from.pwd == this.from.repwd){
-					this.passwordText2 = '비밀번호가 일치합니다.'
-					obj.target.parentElement.classList.add('dis_b')
-					setTimeout(obj.target.parentElement.classList.add('focus', 'success'), 400);
-					this.checkedSta.passwordSta = true;
-					this.successDepth();
-				} else {
-					this.passwordText2 = '비밀번호가 일치하지 않습니다.'
-					obj.target.parentElement.classList.add('dis_b')
-					setTimeout(obj.target.parentElement.classList.add('focus', 'err'), 400)
-				}
-			},
-
-			successDepth(){
-				if(this.checkedSta.idSta == true && this.checkedSta.passwordSta == true ){
-					document.getElementById('phoneDeptnBtn').classList.add('grd');
-				}
-			},
-			
-			getBank(){
-				var objectList = new Array()
-				var objectListData = new Object()
-				axios
-				.get(process.env.VUE_APP_BASE_URL + '/users/bank/')
-				.then( res => {
-					for(var i=0;Object.keys(res.data).length>i;i++){
-						objectList[i] = {accountCode: Object.keys(res.data)[i], accountName: Object.values(res.data)[i]}
+					if(this.from.pwd == this.from.repwd){
+						this.passwordText2 = '비밀번호가 일치합니다.'
+						obj.target.parentElement.classList.add('dis_b')
+						setTimeout(obj.target.parentElement.classList.add('focus', 'success'), 400);
+						this.checkedSta.passwordSta = true;
+						this.successDepth();
+					} else {
+						this.passwordText2 = '비밀번호가 일치하지 않습니다.'
+						obj.target.parentElement.classList.add('dis_b')
+						setTimeout(obj.target.parentElement.classList.add('focus', 'err'), 400)
 					}
-					this.options = objectList
-					// this.optionsSlice(objectList)
-				})
-				.catch( err => {
-					// console.log(err)
-				});
+				},
 
-			},
-
-			optionsSlice(arrayOfObjects){
-				var byDate = arrayOfObjects.slice(0);
-				byDate.sort(function(a,b) {
-					return a.value - b.value;
-				});
-				
-				byDate.unshift({ value: null, text: '은행 선택' })
-				this.options = byDate
-			},
-
-			getAxios(){
-				axios
-				.get(process.env.VUE_APP_BASE_URL + '/users/mobileUserVerifyRequest/')
-				.then( res => {
+				successDepth(){
 					if(this.checkedSta.idSta == true && this.checkedSta.passwordSta == true ){
-						open_popup(res.data.mdl_tkn, this);
+						document.getElementById('phoneDeptnBtn').classList.add('grd');
 					}
-				})
-				.catch( err => {
-					// console.log(err)
-				});
-			},
+				},
 
-			phoneLastTest(){
-				axios
-				.get(process.env.VUE_APP_BASE_URL + '/users/mobileUserVerifyCheck/'+this.mdl_tkn+'/')
-				.then( res => {
-					this.firstCheckedPhone(res)
-				})
-				.catch( err => {
+				getBank(){
+					var objectList = new Array()
+					var objectListData = new Object()
+					axios
+					.get(process.env.VUE_APP_BASE_URL + '/users/bank/')
+					.then( res => {
+						for(var i=0;Object.keys(res.data).length>i;i++){
+							objectList[i] = {accountCode: Object.keys(res.data)[i], accountName: Object.values(res.data)[i]}
+						}
+						this.options = objectList
+						// this.optionsSlice(objectList)
+					})
+					.catch( err => {
+						// console.log(err)
+					});
+				},
+
+				optionsSlice(arrayOfObjects){
+					var byDate = arrayOfObjects.slice(0);
+					byDate.sort(function(a,b) {
+						return a.value - b.value;
+					});
+
+					byDate.unshift({ value: null, text: '은행 선택' })
+					this.options = byDate
+				},
+
+				getAxios(){
+					axios
+					.get(process.env.VUE_APP_BASE_URL + '/users/mobileUserVerifyRequest/')
+					.then( res => {
+						if(this.checkedSta.idSta == true && this.checkedSta.passwordSta == true ){
+							open_popup(res.data.mdl_tkn, this);
+						}
+					})
+					.catch( err => {
+						// console.log(err)
+					});
+				},
+
+				phoneLastTest(){
+					//인증 실패시 노출
+					axios
+					.get(process.env.VUE_APP_BASE_URL + '/users/mobileUserVerifyCheck/'+this.mdl_tkn+'/')
+					.then( res => {
+						this.firstCheckedPhone(res)
+					})
+					.catch( err => {
 					// console.log(err)
-					this.checkedSta.phoneSta = false
-				});
-			},
+						this.checkedSta.phoneSta = false
+					});
+				},
 
 			//ci조회로 변경 예정
 			firstCheckedPhone(res){
 				axios
 				.post(process.env.VUE_APP_BASE_URL + '/users/checkUserDuplicate/', { "ci": res.data.ci}, { withCredentials: true })
-				.then( res => {
-					this.phoneLastTestNext(res)
+				.then( response => {
+					this.phoneLastTestNext(res);
 				})
 				.catch( err => {
-					this.showMsgBoxOne('이미 가입하신 계정이 존재 합니다.', 2)
+					this.showMsgBoxOne('이미 가입하신 계정이 존재 합니다.', 2);
 				});
 			},
 
 			phoneLastTestNext(res){
-				if(res.data.birth.substring(0, 4) >= 2007){
-					return this.showMsgBoxOne(' 14세 미만인 경우, 회원가입이 불가합니다.')
-				}
+				if(res.data.birth.substring(0, 4) >= '2007') return this.showMsgBoxOne(' 14세 미만인 경우, 회원가입이 불가합니다.');
 				this.from.birth = res.data.birth
 				this.from.ci = res.data.ci
 				this.from.foreigner = res.data.foreigner
@@ -384,13 +401,13 @@
 				this.from.tel = res.data.tel
 				this.from.email = this.from.userId
 				this.checkedSta.phoneSta = true//휴대폰 인증
-				this.phoneStaText = this.from.name +' / '+ this.from.tel
+				this.phoneStaText = res.data.name +' / '+ res.data.tel
 			},
 
 			accountAxios(){
 				//휴대폰인증을 하지 않아 이름이 없는 경우
 				if('/'+this.from.name+'/' == '//') return
-				axios
+					axios
 				.get(process.env.VUE_APP_BASE_URL + '/users/bank/'+this.account.accountCode+'/'+this.account.accountNum+'/'+this.from.name+'/')
 				.then( res => {
 					this.checkedSta.accountSta = true
@@ -428,18 +445,19 @@
 			},
 
 			successSignUp(){//회원가입 완
+				this.signUpShow = true;
 				if(this.checkedSta.idSta == true && this.checkedSta.passwordSta == true && this.checkedSta.phoneSta == true && this.checkedSta.accountSta == true){
 					axios
 					.post(process.env.VUE_APP_BASE_URL + '/users/signin/', this.from, { withCredentials: true })
 					.then(function (response) {
-						this.$router.push({name: 'signUpComplete', path: 'signUpComplete'}, function() {
-							// console.log("signUpComplete 호출 완료");
-						});
+						this.signUpShow = false;
+						this.$router.push({name: 'signUpComplete', path: 'signUpComplete'});
 					}.bind(this))
 					.catch(err => {
 						// console.log(err)
 					})
 				} else {
+					this.signUpShow = false;
 					this.showMsgBoxOne('모든 항목은 필수사항입니다.')
 				}
 			},
@@ -456,7 +474,7 @@
 				.then(value => {
 					this.boxTwo = value
 					if(type == 2){
-						this.$router.push({name: 'logInFrom', path: '/logIn'});
+						// this.$router.push({name: 'logInFrom', path: '/logIn', query: {type: 2}});
 					}
 				})
 				.catch(err => {
@@ -550,7 +568,7 @@
 .sign_input_box .input_box select{color:#999;}
 .sign_input_box .input_box span{display:none;opacity:0;float:left;height:20px;transition:.5s;position:absolute;top:0;left:0;font-size: .87rem;color: #999;padding:7px 10px}
 .sign_input_box .input_box.dis_b span{display:block;}
-.sign_input_box .input_box.focus input{padding:30px 10px 10px 10px;}
+.sign_input_box .input_box.focus input{padding:45px 10px 10px 10px;}
 .sign_input_box .input_box.focus span{opacity:1;}
 
 .sign_input_box .input_box.err input{border:solid 1px #f11919;}
@@ -566,7 +584,7 @@
 .list_txt_type2 li em{color:#222}
 .sign_input_box .input_box .phoneDbCheck{position:relative;}
 .sign_input_box .input_box .phoneDbCheck input{position:relative;z-index:1;line-height:1.3rem;}
-.sign_input_box .input_box .phoneDbCheck button{height:40px;position:absolute;top:0;right:0;border:solid 1px #ccc;border-radius:10px;font-size: .7rem;z-index:11;}
+.sign_input_box .input_box .phoneDbCheck button{height:40px;position:absolute;top:0;right:0;border:solid 1px #ccc;border-radius:10px;font-size: .7rem;z-index:10;}
 
 #idtitle.success,
 #pwdtitle.success{color:#498ceb;font-weight:700;}

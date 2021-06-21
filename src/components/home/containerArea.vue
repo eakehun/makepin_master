@@ -81,7 +81,7 @@
 		<b-row class="mt-md-4">
 			<b-col md="5" class="mt-md-0 mt-3">
 				<div class="line_show_box">
-					<div class="ma_title"><span class="h3 mr-1 ml-1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="35" height="35" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+					<!-- <div class="ma_title"><span class="h3 mr-1 ml-1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="35" height="35" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
 						<path style="fill:#FFBC53;" d="M93.324,386.706h72.835c41.438,0,75.03,33.592,75.03,75.03V502H18.294v-40.264  C18.294,420.298,51.887,386.706,93.324,386.706z"/>
 						<polygon style="fill:#FFFFFF;" points="88.167,386.706 129.742,428.28 171.315,386.706 "/>
 						<path style="fill:#5CC1FF;" d="M141.447,256H80.704v30.144c0,15.635,12.675,28.309,28.309,28.309h69.764v-21.121  C178.779,272.714,162.064,256,141.447,256z"/>
@@ -95,11 +95,10 @@
 						<path d="M90.71,194.764v23.774c0,4.044,2.437,7.691,6.173,9.239c1.237,0.513,2.537,0.762,3.825,0.762c2.603,0,5.16-1.017,7.073-2.93  l30.475-30.475h51.967c5.522,0,10-4.477,10-10s-4.478-10-10-10h-56.109c-2.652,0-5.195,1.054-7.071,2.929l-16.332,16.332v-9.261  c0-5.523-4.478-10-10-10h-4.059c-15.143,0-27.462-12.319-27.462-27.462V47.462C69.189,32.319,81.508,20,96.652,20h116.31  c5.522,0,10-4.477,10-10s-4.478-10-10-10H96.652C70.48,0,49.189,21.292,49.189,47.462v100.21  C49.189,171.832,67.333,191.833,90.71,194.764z"/>
 						<path d="M252.124,20c2.63,0,5.2-1.07,7.069-2.93c1.86-1.86,2.931-4.44,2.931-7.07s-1.07-5.21-2.931-7.07  c-1.869-1.86-4.44-2.93-7.069-2.93c-2.641,0-5.221,1.07-7.07,2.93c-1.87,1.86-2.94,4.44-2.94,7.07s1.07,5.21,2.94,7.07  C246.904,18.93,249.483,20,252.124,20z"/>
 						<path d="M354.204,85.46c-2.63,0-5.21,1.07-7.07,2.93c-1.86,1.86-2.93,4.44-2.93,7.07s1.069,5.21,2.93,7.07s4.44,2.93,7.07,2.93  s5.21-1.07,7.069-2.93c1.86-1.86,2.931-4.44,2.931-7.07s-1.07-5.21-2.931-7.07C359.415,86.53,356.834,85.46,354.204,85.46z"/>
-					</svg></span>이용안내</div>
-					<div class="faq_container">
-						<div class="list" v-for="list in faqData" :v-Key="list">
-							<div>{{list.title}}</div>
-							<span class="day">{{list.createDate.split(' ')[0]}}</span>
+					</svg></span>이용안내</div> -->
+					<div class="faq_container noPadding">
+						<div class="inforImg">
+							<img :src="inforImg">
 						</div>
 					</div>
 				</div>
@@ -123,7 +122,7 @@
 					</div>
 					<div class="faq_container">
 						<div class="list" v-for="list in faqData" :v-Key="list">
-							<div>{{list.title}}</div>
+							<div><router-link to="/board/frequentlyAskedQuestions">{{list.title}}</router-link></div>
 							<span class="day">{{list.createDate.split(' ')[0]}}</span>
 						</div>
 					</div>
@@ -166,14 +165,10 @@
 				itemsName: ['날짜', '판매자신청정보', '판매요청', '입금완료', '처리상태'],
 				brandCulture: require('@/assets/culture.jpg'),
 				BrandHappy: require('@/assets/happy.jpg'),
+				inforImg: require('@/assets/makepin_e1.jpg'),
 				items: [],
 				swiperOptions: {
 					slidesPerView: 6,
-					loop: true,
-					autoplay: {
-						delay: 2500,
-						disableOnInteraction: true
-					},
 					simulateTouch: false,
 					direction: 'vertical',
 				},
@@ -279,7 +274,26 @@
 				axios
 				.get(process.env.VUE_APP_BASE_URL+'/users/trading/recent/?page=0&size=10&sort=idx,desc', { withCredentials: true })
 				.then( res => {
-					this.items = res.data.content
+					this.items = res.data.content;
+					if(res.data.content.length <=6){
+						this.swiperOptions = {
+							slidesPerView: 6,
+							simulateTouch: false,
+							direction: 'vertical',
+							loop: false,
+						}
+					} else {
+						this.swiperOptions = {
+							slidesPerView: 6,
+							simulateTouch: false,
+							direction: 'vertical',
+							loop: true,
+							autoplay: {
+								delay: 2500,
+								disableOnInteraction: true
+							},
+						}
+					}
 				})
 				.catch( err => {
         			// console.log(err);
@@ -351,6 +365,7 @@
 </script>
 
 <style>
+.inforImg img{width:100%;}
 .line_show_box{border: solid 1px #ededed;
 	box-shadow: 0 7px 13px 0 rgba(0,0,0,0.06);
 	border-radius: 15px;overflow:hidden;}
@@ -429,12 +444,13 @@ span.last_td{color:#4384f3;font-weight:700;}
 
 
 .faq_container{padding:20px;border-top:none;}
+.faq_container.noPadding{padding:0;}
 .faq_container:after{content:'';display:block;clear:both}
-.faq_container .list{float:left;width:100%;position:relative;padding-right:90px;font-size:1em;line-height:30px;color:#444;border-top:solid 1px #ededed;padding:.4rem;}
+.faq_container .list{float:left;width:100%;position:relative;padding-right:90px;font-size:1em;line-height:30px;color:#444;border-top:solid 1px #ededed;padding:.43rem;}
 .faq_container .list:first-child{border-top:none}
-.faq_container .list div{width:100%;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.faq_container .list div{width:calc(100%-90px);text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
 .faq_container .list .day{position:absolute;top:.4rem;right:.4rem}
-
+.faq_container .list div a{color:#444;}
 @media screen and (max-width: 760px){
 	.ma_title{font-size:.92rem;}
 	.ma_title .h3{font-size:.92rem;}

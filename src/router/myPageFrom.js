@@ -10,20 +10,26 @@ import withDraw from '@/components/myPage/withDraw'
 import store from "../store"
 
 const onlyAuthUser = (to, from, next) => {
-    store.dispatch('mutationsCheckSession').then(function(userSta) {
-        if(userSta.status != 200){
-            alert('로그인이 필요한 페이지 입니다.')
-            store.dispatch('logOut')
-        } else {
-            next()
-        }
-    });
+    if(localStorage.getItem("loginSta") != 'true'){
+        store.dispatch('logOut')
+        // store.dispatch('logOut', {type: 'login'})
+    } else {
+        next()
+    }
+    // store.dispatch('mutationsCheckSession').then(function(userSta) {
+    //     if(userSta.status != 200){
+    //         alert('로그인이 필요한 페이지 입니다.')
+    //         store.dispatch('logOut')
+    //     } else {
+    //         next()
+    //     }
+    // });
 }
 
 export default [
     {
         path: '/myPage',
-        beforeEnter: onlyAuthUser,
+        // beforeEnter: onlyAuthUser,
         component: myPageBody,
         children: [
             {

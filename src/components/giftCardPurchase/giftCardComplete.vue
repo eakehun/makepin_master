@@ -41,9 +41,9 @@
 							<th>입금금액</th>
 							<td>
 								<p>-요청금액 : {{numberWithCommas(requestPrice)}} 원</p>
-								<p>-송금 수수료 : {{numberWithCommas(transperFees)}} 원</p>
-								<p>-판매 수수료 : {{requestPrice / purchaseFeePercents}} 원</p>
-								<p>-입금금액 : {{ numberWithCommas(comepletePrice)}} 원 </p>
+								<p>-판매 수수료 : {{numberWithCommas( requestPrice >= waiverAmount ? fees - transperFees : fees)}} 원</p>
+								<p>-송금 수수료 : {{numberWithCommas( requestPrice >= waiverAmount ? transperFees : 0 )}} 원</p>
+								<p class="comeplete_price">-입금금액 : {{ numberWithCommas(comepletePrice)}} 원 </p>
 							</td>
 						</tr>
 					</tbody>
@@ -112,6 +112,7 @@
 				transperFees:'',
 				accountName: '',
 				accountNum: '',
+				fees: '',
 				purchaseFeePercents:'',
 			}
 		},
@@ -160,7 +161,7 @@
 					this.comepletePrice = user.comepletePrice
 					this.purchaseFeePercents = user.purchaseFeePercents
 					this.items = user.pincode;
-
+					this.fees = user.fees
 					if(user.status == '처리중'){
 						this.pripeStaText = '처리중 (요청 후 최대 1분 정도 소요됩니다.)'
 					} else if(user.status == '판매완료'){
@@ -243,6 +244,7 @@
 .btnn{min-width:100%;height:50px;line-height:50px;display:inline-block;border-radius:2em;border:1px solid rgba(0,0,0,.08);box-shadow:0 1px 6px 0 rgba(0,0,0,.1);background:#fff;font-weight:500;color:#444;font-size:.85rem;text-align:center;vertical-align:middle;cursor:pointer;overflow:visible;white-space:nowrap}
 .btnn.grd{background-color:#498ceb;background-image:linear-gradient(45deg,#498dec 0,#6729a7 95%);box-shadow:0 1px 6px 0 rgb(94 67 183);color:#fff;border:0}
 .btnn.bTcont{margin-top:40px;margin:30px auto 0 auto;display:block;}
+.comeplete_price{margin-top:1.2rem;color:#444;font-weight:700;}
 
 .table{overflow:hidden}
 .table>thead>tr>th{border-bottom-color:#eee}
@@ -263,8 +265,8 @@ table>tbody>tr:hover>td{background-color:#fafafa}
 
 	.table-no-more>thead{position:absolute;top:-9999px;left:-9999px;opacity:0}
 	.table-no-more>tbody>tr>td{position:relative;padding-left:35%}
-	.table-no-more>tbody>tr:nth-child(even)>td{background-color:#fff}
-	.table-no-more>tbody>tr:nth-child(odd)>td{background-color:#fafafa}
+	.table-no-more>tbody>tr:nth-child(even)>td:first-child{background-color:#fafafa}
+	.table-no-more>tbody>tr:nth-child(odd)>td:first-child{background-color:#fafafa}
 	.table-no-more>tbody>tr>td:before{position:absolute;top:15px;left:5%;width:40%;white-space:nowrap;font-weight:700}
 	.table-no-more>tbody>tr>td:after{content:"";position:absolute;top:0;left:0;width:25%;height:100%;border-right:1px solid #eee}
 

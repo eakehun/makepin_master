@@ -47,6 +47,13 @@
 				logoImg: require('@/assets/images/make_pin_logo.png'),
 			}
 		},
+		created() {
+			if(this.$route.query.type == 2){
+				this.$router.push({name: 'logInFrom', path: '/logIn'});
+				window.location.reload();
+			}
+		},
+
 		computed: {
 			...mapState(["isLogin", "isLoginError"])
 		},

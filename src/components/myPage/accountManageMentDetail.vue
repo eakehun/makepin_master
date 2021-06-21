@@ -20,8 +20,8 @@
 							</div>
 						</div>
 						<div class="textC">
-							<b-button class="check_btn" @click="accountChangeData" v-if="changeVal == false">확인</b-button>
-							<b-button variant="primary" class="check_btn" @click="accountChangeData" v-else>확인</b-button>
+							<button class="btnn bTcont grd" @click="accountChangeData" v-if="changeVal == false">확인</button>
+							<button variant="primary" class="btnn bTcont grd" @click="accountChangeData" v-else>확인</button>
 						</div>
 					</div>
 				</div>
@@ -310,7 +310,7 @@ h5{padding:5px;}
 .sign_input_box .input_box select{color:#999;}
 .sign_input_box .input_box span{display:none;opacity:0;float:left;height:20px;transition:.5s;position:absolute;top:0;left:0;font-size: .87rem;color: #999;padding:7px 10px}
 .sign_input_box .input_box.dis_b span{display:block;}
-.sign_input_box .input_box.focus input{padding:30px 10px 10px 10px;}
+.sign_input_box .input_box.focus input{padding:45px 10px 10px 10px;}
 .sign_input_box .input_box.focus span{opacity:1;}
 
 .sign_input_box .input_box.err input{border:solid 1px #f11919;}
@@ -330,7 +330,7 @@ h5{padding:5px;}
 
 #idtitle.success,
 #pwdtitle.success{color:#498ceb;font-weight:700;}
-
+.btnn{width:100%;}
 .btnn.bTcont.phoneBtn{margin-top:0;width:100%;}
 .check_btn{width:100%;margin-top:1rem;}
 </style>

@@ -378,6 +378,7 @@
 </script>
 
 <style scoped="">
+.form-group{margin:10px 0;}
 .from_2box{padding:20px 0;border-bottom:solid 1px #ddd;margin-bottom:10px;border-bottom:none;}
 .btn.login_btn{width:100%;border-radius:0;}
 .sub_text p{font-size:.75em;margin-bottom:.4rem;}
@@ -393,7 +394,7 @@ sign_from_input{}
 .sign_input_box .input_box select{color:#999;}
 .sign_input_box .input_box span{display:none;opacity:0;float:left;height:20px;transition:.5s;position:absolute;top:0;left:0;font-size: .87rem;color: #999;padding:7px 10px}
 .sign_input_box .input_box.dis_b span{display:block;}
-.sign_input_box .input_box.focus input{padding:30px 10px 10px 10px;}
+.sign_input_box .input_box.focus input{padding:45px 10px 10px 10px;}
 .sign_input_box .input_box.focus span{opacity:1;}
 
 .sign_input_box .input_box.err input{border:solid 1px #f11919;}

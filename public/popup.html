@@ -2,6 +2,7 @@
 <html>
 <head>
     <script>
+        document.domain = "makepin.co.kr";
         var call_axios_data = ''
         call_axios();
 
@@ -10,7 +11,7 @@
         }
 
         function child_function(val){
-            console.log(document.getElementById('mdl_tkn') )
+            console.log(document.getElementById('mdl_tkn').value )
             document.getElementById('mdl_tkn').value = val
             document.form1.action = "https://safe.ok-name.co.kr/CommonSvl";
             document.form1.method = "post";
@@ -19,13 +20,14 @@
 
         opener.popup = this;
         document.addEventListener("DOMContentLoaded", function(){
-            if(location.search != ''){
-                opener.lastMdlTkn_function(location.search);
+            if( document.form1.mdl_tkn.value != ''){
+                opener.lastMdlTkn_function(document.getElementById('mdl_tkn').value);
                 window.close();
             } else {
                 child_function(call_axios_data)
             }
         });
+
     </script>
 </head>
 <body>

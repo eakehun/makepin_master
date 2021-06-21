@@ -44,6 +44,7 @@
 	</div>
 </template>
 <script>
+	import { mapState, mapActions } from "vuex"
 	import axios from "axios"
 	export default {
 		name: 'giftCardSaleLimitCheck',
@@ -69,12 +70,17 @@
 				from:[]
 			}
 		},
+		computed:{
+            ...mapState(['isLogin'])
+        },
 		mounted(){
 			this.idxNumber = this.$route.query.idx
 			this.userData();
 		},
 	
 		methods: {
+			...mapActions(["logOut"]),
+			
 			historyBack(){
 				this.$router.go(-1)
 			},
@@ -112,7 +118,7 @@
 
 .bl_horizTable{border-top:1px solid #ddd;border-bottom:1px solid #ddd;}
 .bl_horizTable table{width:100%}
-.bl_horizTable th{width:20%;padding:15px;background-color:#efefef;border-bottom:1px solid #ddd;font-weight:700;vertical-align:middle}
+.bl_horizTable th{width:30%;padding:15px;background-color:#efefef;border-bottom:1px solid #ddd;font-weight:700;vertical-align:middle}
 .bl_horizTable td{padding:15px;border-bottom:1px solid #ddd}
 .bl_horizTable tr:last-child td,.bl_horizTable tr:last-child th{border-bottom-width:0}
 .table td, .table th{vertical-align:middle}

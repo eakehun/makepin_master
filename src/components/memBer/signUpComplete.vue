@@ -12,7 +12,7 @@
         },
         methods: {
         	loginGo(){
-        		this.$router.push({name: 'logInFrom', path: 'logInFrom'}, function() {
+        		this.$router.push({name: 'logInFrom', path: 'logInFrom', query: {type: 2}}, function() {
 					// console.log("로그인 페이지로 이동합니다.");
 				})
         	}

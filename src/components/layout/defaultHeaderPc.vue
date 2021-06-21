@@ -1,45 +1,52 @@
 <template>
-    <b-container class="header_cont">
-        <router-link to="/" class="logo"><img alt="Vue logo" :src="logoImg"></router-link>
-        <div class="header_menu_cont">
-            <div class="menu">
-                <ul>
-                    <li><div class="me_menu" :class=" isActive == 1 ? 'active' : ''" @click="giftCardBuy">상품권 판매신청</div></li>
-                    <li @mouseover="listOne = true" @mouseleave="listOne = false">
-                        <router-link to="/myPage" :class=" isActive == 2 ? 'active' : ''">마이페이지</router-link>
-                        <transition name="fade">
-                            <ul v-if="listOne" @click="listOne = false">
-                                <li><router-link to="/myPage" :class=" isSubActive == 1 ? 'active' : ''">판매거래내역</router-link></li>
-                                <li><router-link to="/myPage/accountManageMent" :class=" isSubActive == 2 ? 'active' : ''">계좌인증 관리</router-link></li>
-                                <li><router-link to="/myPage/privacyManageMent" :class=" isSubActive == 3 ? 'active' : ''">개인정보 관리</router-link></li>
-                                <li><router-link to="/myPage/giftCardSaleLimitCheck" :class=" isSubActive == 4 ? 'active' : ''">판매한도 관리</router-link></li>
-                            </ul>
-                        </transition>
-                    </li>
-                    <li @mouseover="listTwo = true" @mouseleave="listTwo = false">
-                        <router-link to="/board" :class=" isActive == 3 ? 'active' : ''">고객센터</router-link>
-                        <transition name="fade">
-                            <ul v-if="listTwo" @click="listTwo = false">
-                                <li><router-link to="/board" :class=" isSubActive == 5 ? 'active' : ''">공지사항</router-link></li>
-                                <li><router-link to="/board/frequentlyAskedQuestions" :class=" isSubActive == 6 ? 'active' : ''">FAQ</router-link></li>
-                                <li><router-link to="/board/userInquiry" :class=" isSubActive == 7 ? 'active' : ''" @click="giftCardBuy">1:1 문의/답변</router-link></li>
-                            </ul>
-                        </transition>
-                    </li>
-                </ul>
-            </div>
-            <div class="user_menu">
-                <div v-if="isLogin">
-                    <router-link to="/myPage">{{userInfor}} 님</router-link>
-                    <div class="btna" @click="showMsgBoxTwo('로그아웃 하시겠습니까?')">로그아웃</div>
-                </div>
-                <div v-else>
-                    <router-link to="/logIn">로그인</router-link>
-                    <router-link to="/signup">회원가입</router-link>
-                </div>
-            </div>
+    <div>
+        <div class="top_banner" v-if="appTopBannerSta">
+            <a href="https://play.google.com/store/apps/details?id=kr.co.make.android.makePin&hl=ko" target='_blank'><img class="top_banner2" src="@/assets/images/makepin_top2.png"></a>
+            <img class="top_banner1"src="@/assets/images/makepin_top.jpg">
         </div>
-    </b-container>
+        <b-container class="header_cont">
+            <router-link to="/" class="logo"><img alt="Vue logo" :src="logoImg"></router-link>
+            <div class="header_menu_cont">
+                <div class="menu">
+                    <ul>
+                        <li><div class="me_menu" :class=" isActive == 1 ? 'active' : ''" @click="giftCardBuy">상품권 판매신청</div></li>
+                        <li @mouseover="listOne = true" @mouseleave="listOne = false">
+                            <div class="me_menu" :class=" isActive == 2 ? 'active' : ''" @click="isLoginChecked('/myPage')">마이페이지</div>
+                            <transition name="fade">
+                                <ul v-if="listOne" @click="listOne = false">
+                                    <li><div class="me_menu" :class=" isSubActive == 1 ? 'active' : ''" @click="isLoginChecked('/myPage')">판매거래내역</div></li>
+                                    <li><div class="me_menu" :class=" isSubActive == 2 ? 'active' : ''" @click="isLoginChecked('/myPage/accountManageMent')">계좌인증 관리</div></li>
+                                    <li><div class="me_menu" :class=" isSubActive == 3 ? 'active' : ''" @click="isLoginChecked('/myPage/privacyManageMent')">개인정보 관리</div></li>
+                                    <li><div class="me_menu" :class=" isSubActive == 4 ? 'active' : ''" @click="isLoginChecked('/myPage/giftCardSaleLimitCheck')">판매한도 관리</div></li>
+                                </ul>
+                            </transition>
+                        </li>
+                        <li @mouseover="listTwo = true" @mouseleave="listTwo = false">
+                            <router-link to="/board" :class=" isActive == 3 ? 'active' : ''">고객센터</router-link>
+                            <transition name="fade">
+                                <ul v-if="listTwo" @click="listTwo = false">
+                                    <li><router-link to="/board" :class=" isSubActive == 5 ? 'active' : ''">공지사항</router-link></li>
+                                    <li><router-link to="/board/frequentlyAskedQuestions" :class=" isSubActive == 6 ? 'active' : ''">FAQ</router-link></li>
+                                    <li><div class="me_menu" :class=" isSubActive == 7 ? 'active' : ''" @click="isLoginChecked('/board/userInquiry')">1:1 문의/답변</div></li>
+                                </ul>
+                            </transition>
+                        </li>
+                    </ul>
+                </div>
+                <div class="user_menu">
+                    <div v-if="isLogin">
+                        <router-link to="/myPage">{{userInfor}} 님</router-link>
+                        <div class="btna" @click="showMsgBoxTwo('로그아웃 하시겠습니까?')">로그아웃</div>
+                    </div>
+                    <div v-else>
+                        <router-link to="/logIn">로그인</router-link>
+                        <router-link to="/signup">회원가입</router-link>
+                    </div>
+                </div>
+            </div>
+        </b-container>
+
+    </div>
 </template>
 
 <script>
@@ -56,23 +63,45 @@
                 activeMenu2: false,
                 isActive: 0,
                 isSubActive: '',
+                appTopBannerSta: true,
             }
         },
         created() {
-            this.isActiveFun(this.$route.name)
+            this.isActiveFun(this.$route.name);
+            if( navigator.userAgent.indexOf('makePin') != -1){
+                this.appTopBannerSta = false
+            }
         },
         computed:{
-            ...mapState(['isLogin', 'userInfor', 'deviceType'])
+            ...mapState(['isLogin', 'userInfor', 'deviceType', 'logInSuccess'])
         },
 
         methods: {
-            ...mapActions(["logOut"]),
+            ...mapActions(["logOut", "checkSession"]),
 
-            giftCardBuy(){
+            isLoginChecked(page){
                 if(this.isLogin == false){
                     this.showMsgBoxTwo('로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?.', 1)
                 } else {
-                    this.checkAccountCode()
+                    this.$router.push({path: page});
+                }
+            },
+
+            giftCardBuy(){
+
+                // axios
+                // .get(process.env.VUE_APP_BASE_URL+'/users/info/', { withCredentials: true })
+                // .then( res => {
+                //     this.checkAccountCode();
+                // })
+                // .catch( err => {
+                //     this.showMsgBoxTwo('로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?.', 1)
+                // });
+
+                if(this.isLogin == false){
+                    this.showMsgBoxTwo('로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?.', 1)
+                } else {
+                    this.checkAccountCode();
                 }
             },
 
@@ -135,9 +164,11 @@
                     this.boxTwo = value
                     if(type == 1){
                         if(value == true){
-                            this.$router.push({name: 'logInFrom', path: '/logIn'}, function() {
+                            this.$router.push({name: 'logInFrom', path: '/logIn', query: {type: 2}}, function() {
                                 //console.log("logIn 호출 완료");
                             });
+                        } else {
+                            this.logOut()
                         }
                     } else if(type == 2){
                         this.$router.push({name: 'privacyManageMent', path: '/myPage/privacyManageMent'}, function() {
@@ -231,6 +262,9 @@
 
 <style>
 *:focus { outline:none; }
+.top_banner{position:relative;height:100px;overflow:hidden;}
+.top_banner1{width:100%;min-height:100px;}
+.top_banner2{position:absolute;top:51%;left:50%;width:600px;margin-left:-300px;margin-top:-28px}
 .defaultHeader{position:relative;z-index:20;}
 .header_menu_cont:after{content:'';display:block;clear:both;}
 .box{width:100px;height:100px;background-color:#ccc;}
@@ -251,6 +285,7 @@
 
 .menu{float:left;margin-left:50px;margin-top:7px;}
 .menu > a{display:block;padding:20px;color:#444;text-decoration:none;text-align:center;}
+.menu ul{margin:0;}
 .menu ul:after{content:'';display:block;clear:both;}
 .menu li{display:block;float:left;position:relative;color:#444;min-width:150px}
 .menu li > .me_menu{cursor:pointer;}

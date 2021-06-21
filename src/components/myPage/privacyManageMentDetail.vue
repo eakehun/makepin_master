@@ -356,7 +356,7 @@
 				axios
 				.put(process.env.VUE_APP_BASE_URL + '/users/phone/', {mobileOperator: this.from.mobileOperator,tel: this.from.tel,ci: this.from.ci}, { withCredentials: true })
 				.then( res => {
-					this.showMsgBoxOne('휴대폰가 변경 되었습니다.')
+					this.showMsgBoxOne('휴대폰 인증이 변경되었습니다.')
 					this.disabledSta = false
 					this.userPhoneData = ''+this.from.name+' / '+this.from.tel+''
 				})
@@ -404,7 +404,7 @@ position: relative;}
 .sign_input_box .input_box span{display:none;opacity:0;float:left;height:20px;transition:.5s;position:absolute;top:0;left:0;font-size: .87rem;
 color: #999;padding:7px 10px}
 .sign_input_box .input_box.dis_b span{display:block;}
-.sign_input_box .input_box.focus input{padding:30px 10px 10px 10px;}
+.sign_input_box .input_box.focus input{padding:45px 10px 10px 10px;}
 .sign_input_box .input_box.focus span{opacity:1;}
 
 .sign_input_box .input_box.err input{border:solid 1px #f11919;}

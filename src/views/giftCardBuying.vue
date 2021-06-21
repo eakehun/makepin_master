@@ -46,19 +46,15 @@
 .mobile .gp_num.one{float:left;width:50px;margin:5px 5px 5px 0}
 .mobile .gp_num.two{float:left;width:50px;margin:5px 5px 5px 0}
 .mobile .gp_num.three{float:left;width:50px;margin:5px 5px 5px 0;}
-
 .mobile .gp_num.one.active,
 .mobile .gp_num.two.active,
 .mobile .gp_num.three.active{width: calc(100% - 115px);}
-
 .mobile .gp_num.one.active.prev_active,
 .mobile .gp_num.two.active.prev_active,
 .mobile .gp_num.three.active.prev_active{width:50px;}
 .mobile .gp_num.one.active.prev_active:after,
 .mobile .gp_num.two.active.prev_active:after,
 .mobile .gp_num.three.active.prev_active:after{background-color:#498ceb;background-image:linear-gradient(45deg,#498dec,#6729a7 95%);box-shadow:0 1px 6px 0 rgb(94 67 183);color:#fff;}
-
-    
 
 .gp_num.one:after,
 .gp_num.two:after,

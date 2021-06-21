@@ -10,7 +10,7 @@
 					<h4>회원가입을 진심으로 축하합니다.</h4>
 				</div>
 				<router-view @checkeddetail="clickedShowDetailModal">
-					<div slot="header">
+					<div slot="header" class="signup_head">
 						<div class="stepper_box" id="successCont" :class="[hiddenCont ? hideCont : 'activeClass']">
 							<div class="steps_wrapper">
 								<div id="depth1" class="step preps" :class="[depth1 ? activeClass : 'deactivated']">
@@ -128,6 +128,7 @@
 </script>
 
 <style>
+.signup_head{position:relative;z-index:9;}
 #successShowCont{display:none;}
 #successShowCont.activated{display:block;border:none;}
 #successShowCont h1,

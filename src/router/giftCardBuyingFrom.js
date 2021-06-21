@@ -17,9 +17,15 @@ const rejectAuthUser = (to, from, next) => {
 
 //인증되지 않은 유저는 접근할수 없다.
 const onlyAuthUser = (to, from, next) => {
+    // if(!store.state.isLogin){
+    //     alert('로그인이 필요한 페이지 입니다.');
+    //     store.dispatch('logOut', {type: 'login'})
+    // } else {
+    //     next()
+    // }
+
     store.dispatch('mutationsCheckSession').then(function(userSta) {
         if(userSta.status != 200){
-            alert('로그인이 필요한 페이지 입니다.')
             next('/')
         } else {
             next()
@@ -30,7 +36,7 @@ const onlyAuthUser = (to, from, next) => {
 export default [
     {
         path: '/giftCardBuying',
-        // beforeEnter: onlyAuthUser,
+        beforeEnter: onlyAuthUser,
         component: giftCardBody,
         children: [
             {

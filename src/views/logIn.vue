@@ -23,12 +23,7 @@
 
 <style scoped="">
 .login_container.col-md-5{margin:0 auto;padding:100px 0;}
-.signFromCont {
-    border: 1px solid #ededed;
-    border-radius: 20px;
-    padding: 50px;
-    display: block;
-}
+.signFromCont{border:1px solid #ededed;border-radius:20px;padding:50px;display:block}
 @media (min-width: 768px){
 	.col-md-5.login_container{margin:0 auto;padding:100px 0;}
 }

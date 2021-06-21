@@ -105,10 +105,12 @@
 				axios
 	            .get(process.env.VUE_APP_BASE_URL + this.userBoardFixedFaqPage +'&size=10', )
 	            .then( res => {
-	                this.faqFixedListData = res.data.content
-					this.fixedNotice = true
-					this.listlp = this.listlp - res.data.content.length
-					this.faqList()
+	            	if(res.data.content.length != 0){
+	            		this.faqFixedListData = res.data.content
+						this.fixedNotice = true
+						this.listlp = this.listlp - res.data.content.length
+						this.faqList()
+	            	}
 	            })
 	            .catch( err => {
 	                // console.log(err);
@@ -154,7 +156,12 @@
 			},
 
 			dayLength(data){
-				var qs = data.substring(data.indexOf(',') + 1).split(' ');
+				if(data == undefined){
+					return
+				} else {
+					var qs = data.substring(data.indexOf(',') + 1).split(' ');
+				}
+				
 				return qs[0]
 			}
 		},
@@ -217,12 +224,12 @@
 .faq_cont .title{float:left;width:calc(100% - 170px);}
 .faq_cont .day{float:left;width:120px;text-align:center;}
 .search_cont{position:relative;width:550px;margin:0 auto;}
-.search_cont .form-control{padding:1rem;}
+/*.search_cont .form-control{padding:1rem;} 검색에 패딩이 들어감 */
 .search_cont .btn{border:solid 1px #ccc;position:absolute;top:0;right:0;}
 .mobile .faq_cont_head{padding:.5rem 0}
 .mobile .faqcontbox{padding:1rem 0;}
 .mobile .search_cont{margin:10%;width:80%;}
-.mobile .search_cont .form-control{padding:5px;}
+.mobile .search_cont .form-control{padding:6px;}
 
 .mobile .faq_cont .num{width:100%;text-align:left;padding:0 1rem;box-sizing:border-box;}
 .mobile .faq_cont .title{float:left;width:100%;padding:0 1rem;box-sizing:border-box;}

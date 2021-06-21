@@ -34,7 +34,7 @@
             return {
                 logoImg: require('@/assets/images/main_pin_flogo.png'),
                 not_footer: false,
-                email: 'help@abcde.fgh'
+                email: 'cs@makepin.co.kr'
             }
         },
         created() {

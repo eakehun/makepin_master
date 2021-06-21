@@ -150,12 +150,9 @@
 				<p>• 완료된 거래건은 취소나 환불이 불가하며, 판매가 완료된 핀번호는 사용완료 처리되므로, 타 서비스에서 이용이 불가합니다.</p>
 				<p>• 부정한 목적 또는 방법으로 본 서비스를 이용할 경우 발생하는 민, 형사상의 모든 책임은 이용자 본인에게 있습니다.</p>
 			</b-modal>
-			<div>{{culturelistDataLength}}</div>
-			<div>{{happylistDataLength}}</div>
-
 		</b-overlay>
-		<div @click="sdfun"> sdfsdfsdfdsf</div>
 	</div>
+
 </template>
 
 <script>
@@ -227,7 +224,6 @@
 			this.giftSeviceSta()
 			this.userData()
 			this.userAccountData()
-			this.browType = 'desktop'
 		},
 		computed: {
 			...mapState(["isLogin"])
@@ -446,7 +442,6 @@
 			},
 
 			pinAutoNumFirst(){
-
 				this.pinCodeShow = true
 				setTimeout(() => {
 					this.pinAutoNum()
@@ -674,8 +669,6 @@
 			},
 
 			radioChceck(checked) {
-
-
 				this.giftRadio = true
 				if(this.isLogin != true) return this.showMsgBoxOne('로그인이 필요한 서비스 입니다.')
 					if(checked.target.id == 'culture'){
@@ -694,9 +687,9 @@
 						}
 					}
 
-					if(this.happySeve == false && this.selected == ''){
-						this.giftRadio = false
-					}
+					// if(this.happySeve == false && this.selected == ''){
+					// 	this.giftRadio = false
+					// }
 
 					if(document.getElementById('happy').checked){
 						this.selected = 'happy'
@@ -749,6 +742,7 @@
 					}
 				},
 				$mq (val){
+					
 					this.browType = val
 				},
 		// cultureValue(data){
